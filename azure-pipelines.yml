@@ -10,6 +10,11 @@ pool:
   vmImage: Windows-latest
 
 steps:
+- task: UseDotNet@2
+  displayName: Install sdk version
+  inputs:
+    packageType: 'sdk'
+    version: 6.0.101
 - task: NuGetToolInstaller@1
   displayName: Nuget Install
   inputs:
@@ -20,11 +25,6 @@ steps:
     command: 'restore'
     restoreSolution: 'OctopusCLI\source'
     feedsToUse: 'select'
-- task: UseDotNet@2
-  displayName: Install sdk version
-  inputs:
-    packageType: 'sdk'
-    version: 
 - task: DotNetCoreCLI@2
   displayName: dotnet restore
   inputs:
