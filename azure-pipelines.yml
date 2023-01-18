@@ -23,15 +23,13 @@ steps:
   displayName: nuget restore
   inputs:
     command: 'restore'
-    restoreSolution: ' **/*.csproj'
+    restoreSolution: ' **/*.sln'
     feedsToUse: 'select'
 - task: DotNetCoreCLI@2
-  displayName: dotnet run and build
+  displayName: dotnet build
   inputs:
-    command: 'custom'
+    command: 'build'
     projects: '**/*.csproj'
-    custom: 'run build'
-    configuration: release
 - task: DotNetCoreCLI@2
   displayName: dotnet restore
   inputs:
