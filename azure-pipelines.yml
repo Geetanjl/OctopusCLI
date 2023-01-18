@@ -1,0 +1,67 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: Windows-latest
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: Nuget Install
+  inputs:
+    versionSpec: 
+- task: NuGetCommand@2
+  displayName: nuget restore
+  inputs:
+    command: 'restore'
+    restoreSolution: 'OctopusCLI\source'
+    feedsToUse: 'select'
+- task: UseDotNet@2
+  displayName: Install sdk version
+  inputs:
+    packageType: 'sdk'
+    version: '6.x'
+- task: DotNetCoreCLI@2
+  displayName: dotnet restore
+  inputs:
+    command: 'restore'
+    projects: 'OctopusCLI\source'
+    feedsToUse: 'select'
+    configuration: release
+- task: DotNetCoreCLI@2
+  displayName: dotnet build
+  inputs:
+    command: 'build'
+    projects: 'OctopusCLI\source'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    configuration: release
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    projects: 'OctopusCLI\source'
+    configuration: release
+- task: DotNetCoreCLI@2
+  displayName: publish dotnet
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    configuration: release
+- task: PublishBuildArtifacts@1
+  displayName: publish Artifact
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+- task: DownloadBuildArtifacts@1
+  displayName: download artifact
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'drop'
+    downloadPath: '$(System.ArtifactsDirectory)'
