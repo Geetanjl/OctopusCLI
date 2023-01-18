@@ -23,27 +23,27 @@ steps:
   displayName: nuget restore
   inputs:
     command: 'restore'
-    restoreSolution: 'OctopusCLI\source\OctopusCli.sln'
+    restoreSolution: 'OctopusCli.sln'
     feedsToUse: 'select'
 - task: DotNetCoreCLI@2
   displayName: dotnet restore
   inputs:
     command: 'restore'
-    projects: 'OctopusCLI\source\OctopusCli.sln'
+    projects: 'OctopusCli.sln'
     feedsToUse: 'select'
     configuration: release
 - task: DotNetCoreCLI@2
   displayName: dotnet build
   inputs:
     command: 'build'
-    projects: 'OctopusCLI\source\OctopusCli.sln'
+    projects: 'OctopusCli.sln'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
     configuration: release
 - task: DotNetCoreCLI@2
   displayName: dotnet test
   inputs:
     command: 'test'
-    projects: 'OctopusCLI\source\OctopusCli.sln'
+    projects: 'OctopusCli.sln'
     configuration: release
 - task: DotNetCoreCLI@2
   displayName: publish dotnet
